@@ -91,7 +91,7 @@ export default function CreateEventPage() {
       <div className="max-w-2xl mx-auto mb-8">
         <Link href="/" className="inline-flex items-center gap-2 mb-6">
           <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/LEGACY%20LOGO%202025%20-%208-y7muvZxVozedM2myTuZgQ8d7m3W17E.png"
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/LEGACY%20LOGO%202025%20-%207-qmcsAvoAEUYPnzuiQb6Hmp5DGlYnmz.png"
             alt="Legacy Logo"
             width={120}
             height={34}

@@ -86,7 +86,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Image
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/LEGACY%20LOGO%202025%20-%208-y7muvZxVozedM2myTuZgQ8d7m3W17E.png"
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/LEGACY%20LOGO%202025%20-%207-qmcsAvoAEUYPnzuiQb6Hmp5DGlYnmz.png"
               alt="Legacy Logo"
               width={140}
               height={40}

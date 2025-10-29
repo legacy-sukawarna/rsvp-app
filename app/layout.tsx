@@ -18,6 +18,11 @@ export const metadata: Metadata = {
   title: "Legacy Events",
   description: "Create and join events",
   generator: "v0.app",
+  icons: {
+    icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/LEGACY%20LOGO%202025%20-%207-qmcsAvoAEUYPnzuiQb6Hmp5DGlYnmz.png",
+    apple:
+      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/LEGACY%20LOGO%202025%20-%207-qmcsAvoAEUYPnzuiQb6Hmp5DGlYnmz.png",
+  },
 }
 
 export default function RootLayout({
