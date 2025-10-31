@@ -2,11 +2,13 @@ import { createClient } from "@/lib/supabase/server"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { CalendarIcon, MapPinIcon, UsersIcon, ArrowLeftIcon, ExternalLinkIcon } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { RSVPForm } from "@/components/rsvp-form"
+import { ImagePopup } from "@/components/image-popup"
+import { DeleteEventButton } from "@/components/delete-event-button"
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -15,6 +17,9 @@ interface PageProps {
 export default async function EventDetailPage({ params }: PageProps) {
   const { id } = await params
   const supabase = await createClient()
+
+  // Get current user
+  const { data: { user } } = await supabase.auth.getUser()
 
   // Fetch event details
   const { data: event, error: eventError } = await supabase.from("events").select("*").eq("id", id).single()
@@ -38,13 +43,16 @@ export default async function EventDetailPage({ params }: PageProps) {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b bg-card">
-        <div className="max-w-5xl mx-auto px-4 py-4">
+        <div className="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
           <Link href="/">
             <Button variant="ghost" className="gap-2">
               <ArrowLeftIcon className="h-4 w-4" />
               Back to Events
             </Button>
           </Link>
+          {user && event.created_by === user.id && (
+            <DeleteEventButton eventId={id} />
+          )}
         </div>
       </header>
 
@@ -56,11 +64,13 @@ export default async function EventDetailPage({ params }: PageProps) {
               {/* Event Image */}
               <div className="relative h-80 bg-muted">
                 {event.image_url ? (
-                  <img
-                    src={event.image_url || "/placeholder.svg"}
-                    alt={event.title}
-                    className="w-full h-full object-cover"
-                  />
+                  <ImagePopup src={event.image_url} alt={event.title}>
+                    <img
+                      src={event.image_url}
+                      alt={event.title}
+                      className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                    />
+                  </ImagePopup>
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
                     <CalendarIcon className="h-24 w-24 text-muted-foreground/30" />
@@ -132,6 +142,7 @@ export default async function EventDetailPage({ params }: PageProps) {
                     {rsvps.map((rsvp) => (
                       <div key={rsvp.id} className="flex items-center gap-3 p-3 rounded-lg bg-muted">
                         <Avatar>
+                          {rsvp.avatar_url && <AvatarImage src={rsvp.avatar_url} />}
                           <AvatarFallback className="bg-foreground text-background">
                             {rsvp.attendee_name
                               .split(" ")

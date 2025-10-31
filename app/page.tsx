@@ -8,6 +8,8 @@ import { CalendarIcon, MapPinIcon, UsersIcon, PlusIcon } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { useEffect, useState } from "react"
+import { AuthButton } from "@/components/auth-button"
+import { useAuth } from "@/hooks/use-auth"
 
 interface Event {
   id: string
@@ -26,6 +28,7 @@ interface RSVP {
 }
 
 export default function HomePage() {
+  const { user } = useAuth()
   const [events, setEvents] = useState<Event[]>([])
   const [rsvpCounts, setRsvpCounts] = useState<Record<string, number>>({})
   const [loading, setLoading] = useState(true)
@@ -97,12 +100,17 @@ export default function HomePage() {
               <p className="text-muted-foreground text-sm mt-0.5">Discover and join events</p>
             </div>
           </div>
-          <Link href="/create">
-            <Button size="lg" className="gap-2">
-              <PlusIcon className="h-5 w-5" />
-              Create Event
-            </Button>
-          </Link>
+          <div className="flex items-center gap-3">
+            <AuthButton />
+            {user && (
+              <Link href="/create">
+                <Button size="lg" className="gap-2">
+                  <PlusIcon className="h-5 w-5" />
+                  Create Event
+                </Button>
+              </Link>
+            )}
+          </div>
         </div>
       </header>
 

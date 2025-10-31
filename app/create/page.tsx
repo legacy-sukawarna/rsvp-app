@@ -2,9 +2,10 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
+import { useAuth } from "@/hooks/use-auth"
 import { uploadImage } from "./actions"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -17,10 +18,17 @@ import Link from "next/link"
 
 export default function CreateEventPage() {
   const router = useRouter()
+  const { user, loading } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/')
+    }
+  }, [user, loading, router])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -72,6 +80,7 @@ export default function CreateEventPage() {
           event_date: eventDate,
           capacity,
           image_url: imageUrl,
+          created_by: user?.id,
         })
         .select()
         .single()
@@ -84,6 +93,21 @@ export default function CreateEventPage() {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background py-12 px-4 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p>Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!user) {
+    return null
   }
 
   return (
