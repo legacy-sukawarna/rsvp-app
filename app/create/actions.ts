@@ -10,7 +10,13 @@ export async function uploadImage(formData: FormData) {
   }
 
   try {
-    const blob = await put(file.name, file, {
+    const timestamp = Date.now()
+    const random = Math.random().toString(36).substring(2, 8)
+    const extension = file.name.split('.').pop()
+    const baseName = file.name.replace(/\.[^/.]+$/, "")
+    const uniqueFileName = `${baseName}-${timestamp}-${random}.${extension}`
+
+    const blob = await put(uniqueFileName, file, {
       access: "public",
     })
 

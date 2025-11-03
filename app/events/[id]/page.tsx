@@ -9,6 +9,8 @@ import { notFound } from "next/navigation"
 import { RSVPForm } from "@/components/rsvp-form"
 import { ImagePopup } from "@/components/image-popup"
 import { DeleteEventButton } from "@/components/delete-event-button"
+import { ShareButton } from "@/components/share-button"
+import { EditIcon } from "lucide-react"
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -50,9 +52,20 @@ export default async function EventDetailPage({ params }: PageProps) {
               Back to Events
             </Button>
           </Link>
-          {user && event.created_by === user.id && (
-            <DeleteEventButton eventId={id} />
-          )}
+          <div className="flex gap-2">
+            <ShareButton eventId={id} />
+            {user && event.created_by === user.id && (
+              <>
+                <Link href={`/events/${id}/edit`}>
+                  <Button variant="outline" size="sm" className="gap-2">
+                    <EditIcon className="h-4 w-4" />
+                    Edit Event
+                  </Button>
+                </Link>
+                <DeleteEventButton eventId={id} />
+              </>
+            )}
+          </div>
         </div>
       </header>
 
